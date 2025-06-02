@@ -1,7 +1,13 @@
 import React from "react";
 
+import Button from '@mui/material/Button';
+import { Typography } from "@mui/material";
+import NavBar from "./NavBar";
+
 export default function App() {
     return (
-        <h1>Hello World from react!</h1>
+        <>
+            <NavBar />
+        </>
     );
 }

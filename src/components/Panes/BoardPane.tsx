@@ -24,7 +24,6 @@ export default function BoardPane({cards}: {cards: Array<ICard>}) {
                             },
                         }}
                         data-index = {index}
-                        data-active = {gameContextAPI.lastSelectedCardIndexState === index ? '' : undefined}
                         onClick={(e) => gameContextAPI.tryPlayTurn(e)}
                     >
                         <CardContent data-index={index} sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -1,7 +1,11 @@
 import React from "react";
+import Style from './TurnPane.module.scss';
+import { Typography } from "@mui/material";
 
 export default function TurnPane() {
     return (
-        <h2>turn pane</h2>
-    )
+        <div className={Style["turn-pane"]}>
+            <Typography>Turn Pane</Typography>
+        </div>
+    );
 }

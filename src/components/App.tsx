@@ -1,15 +1,14 @@
 import React from "react";
+import Style from './App.module.scss';
 
-import Button from '@mui/material/Button';
-import { Typography } from "@mui/material";
 import NavBar from "./NavBar";
 import Game from "./Game";
 
 export default function App() {
     return (
-        <>
+        <div className={Style.app}>
             <NavBar />
             <Game />
-        </>
+        </div>
     );
 }

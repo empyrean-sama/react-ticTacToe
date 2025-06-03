@@ -9,6 +9,8 @@ import IGameContext from "../interface/IGameContextAPI";
 import ECardState from "../enum/ECardState";
 import EGameState from "../enum/EGameState";
 
+import Style from './Game.module.scss';
+
 export const gameContext = createContext<IGameContext | undefined>(undefined);
 
 export default function Game() {
@@ -67,7 +69,7 @@ export default function Game() {
 
     return (
         <gameContext.Provider value={{lastSelectedCardIndexState, setLastSelectedCardIndex, tryPlayTurn, restartGame, rewindBoardToTurn}}>
-            <div className="flex">
+            <div className={Style["game-pane"]}>
                 <TurnPane />
                 <BoardPane cards={cards} />
                 <HistoryPane />

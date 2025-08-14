@@ -12,6 +12,7 @@ import ECardState from "../enum/ECardState";
 import EGameState from "../enum/EGameState";
 import { FaRegCircle } from "react-icons/fa6";
 import { ImCross } from "react-icons/im";
+import { Backdrop, CircularProgress, Typography } from "@mui/material";
 
 export const gameContext = createContext<IGameContext | undefined>(undefined);
 
@@ -25,6 +26,7 @@ function getStartingBoard(): Array<ECardState> {
 
 export default function Game() {
     const [turns, setTurns] = useState<Array<Array<ECardState>>>([getStartingBoard()]); // always place x's on odd turns
+    const [aiPlaying, setAiPlaying] = useState<boolean>(false);
     
     function restartGame(): undefined {
         setTurns([getStartingBoard()]);
@@ -73,6 +75,12 @@ export default function Game() {
 
     return (
         <gameContext.Provider value={{playTurn, restartGame, rewindBoardToTurn, getCurrentTurnNumber, getIconInPlay, getGameState}}>
+            <Backdrop sx={(theme) => ({ zIndex: theme.zIndex.drawer + 1 })} open={aiPlaying}>
+                <div className={Style['backdrop-container']}>
+                    <Typography color="white" variant="h5" component="h1">AI is playing...</Typography>
+                    <CircularProgress color="primary" />
+                </div>
+            </Backdrop>
             <div className={Style["game-pane"]}>
                 <TurnPane />
                 <BoardPane cards={turns[turns.length-1]} />

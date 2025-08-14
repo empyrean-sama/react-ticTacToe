@@ -27,7 +27,7 @@ export default function App() {
                 <NavBar setUseAi={setUseAi} useAi={useAi} />
                 <div className={Style["flex-100-container"]}>
                     <Game />
-                </div>    
+                </div>
             </appContext.Provider>
         </div>
     );

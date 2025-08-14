@@ -20,14 +20,25 @@ export default class LambdaStack extends Stack {
             environment: {
                 DEEPSEEK_KEY: environment["my-tic-tac-toe-key"]
             },
-            depsLockFilePath: path.join(__dirname, "..", "..", "..", "package-lock.json"),
-            timeout: Duration.seconds(100)
+            timeout: Duration.seconds(15)
+        });
+
+        const checkDeepSeekWorkingLambda = new NodejsFunction(this, 'checkDeepSeekWorkingLambda', {
+            runtime: Runtime.NODEJS_18_X,
+            entry: path.join(__dirname, "..", "Lambdas", "deepSeekWorking.ts"),
+            handler: "main",
+            environment: {
+                DEEPSEEK_KEY: environment["my-tic-tac-toe-key"]
+            },
+            timeout: Duration.seconds(10)
         });
 
         const nextMoveLambdaIntegration = new LambdaIntegration(nextMoveLambda);
-        
+        const checkDeepSeekWorkingLambdaIntegration = new LambdaIntegration(checkDeepSeekWorkingLambda);
+
         const api = new RestApi(this, 'tic-tac-toe-api');
         const resources = api.root.addResource('ticTacToe');
-        resources.addMethod('POST', nextMoveLambdaIntegration, {requestValidatorOptions: {validateRequestBody: false}});
+        resources.addMethod('POST', nextMoveLambdaIntegration);
+        resources.addMethod('GET', checkDeepSeekWorkingLambdaIntegration);
     }
 }

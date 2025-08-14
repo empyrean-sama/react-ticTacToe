@@ -1,5 +1,5 @@
-import React, { cloneElement, createContext, useState } from "react";
-import { checkGameOver } from '../Helper';
+import React, { cloneElement, createContext, useEffect, useState } from "react";
+import { checkGameState } from '../Helper';
 
 import _ from 'lodash';
 
@@ -15,56 +15,54 @@ import Style from './Game.module.scss';
 
 export const gameContext = createContext<IGameContext | undefined>(undefined);
 
+function getStartingBoard(): Array<ECardState> {
+    const boardState: Array<ECardState> = [];
+    for(let i=0; i<9; i++) {
+        boardState.push(ECardState.undefined);
+    }
+    return boardState;
+}
+
 export default function Game() {
-    const [turns, setTurns] = useState<Array<Array<ICard>>>([getDefaultCards()]); // always place x's on odd turns
+    const [turns, setTurns] = useState<Array<Array<ECardState>>>([getStartingBoard()]); // always place x's on odd turns
+    
+    function restartGame(): undefined {
+        setTurns([getStartingBoard()]);
+    }
 
     function getCurrentTurnNumber(): number {
         return turns.length;
     }
 
-    function setLastSelectedCardIndex(index: number) {
-        if(index < 0 || index > 8) {
-            throw new Error('index out of bounds!');
+    function rewindBoardToTurn(turnNumber: number): undefined {
+        if(turnNumber < 0 || turnNumber > 9) {
+            throw new Error('trying to rewind to invalid turn number');
         }
+        const newTurns = turns.slice(0, turnNumber + 1).map((turn) => [...turn]);
+        setTurns(newTurns);
     }
 
-    function rewindBoardToTurn(turnNumber: number) {
-        if(turnNumber >= 0 && turnNumber < turns.length) {
-            const newTurns = turns.slice(0, turnNumber);
-            setTurns(_.cloneDeep(newTurns));
-        }
-        else {
-            throw new Error('incorrect turn number specified');
-        }
-    }
+    function playTurn(clickedCardIndex: number): undefined {
+        const turnNumber = getCurrentTurnNumber();
+        const latestTurnCloned = [...(turns[turns.length-1])];
+        
+        if(latestTurnCloned[clickedCardIndex] === ECardState.undefined) {
+            latestTurnCloned[clickedCardIndex] = (turnNumber % 2 === 0)? ECardState.cross : ECardState.circle;
 
-    function tryPlayTurn(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        const clickedCardSurface = e.target as HTMLDivElement;
-        const clickedCardSurfaceIndex = parseInt(clickedCardSurface.dataset['index'] as string);
-
-        if(turns[turns.length-1][clickedCardSurfaceIndex].state === ECardState.undefined) {
-            const newCards = [...turns[turns.length-1]];
-            newCards[clickedCardSurfaceIndex].state = ((turns.length % 2) === 0)? ECardState.circle : ECardState.cross; //todo: maybe implicitly don't decide here that player 1 is X and player 2 is O 
-            
-            const gameOver = checkGameOver(newCards);
-            if(gameOver !== EGameState.goingOn) {
-                if(gameOver === EGameState.draw) {
-                    alert('draw')
-                }
-                else {
-                    alert(gameOver + ' won');
-                }
+            // try to see if the game is over
+            const gameState = checkGameState(latestTurnCloned);
+            if(gameState !== EGameState.goingOn) {
+                alert(gameState);
             }
-            setTurns([...turns, [...newCards]]);
-        }
-    }
 
-    function restartGame(): void {
-        setTurns([getDefaultCards()]);
+            // register the turn recently played
+            const clonedTurns = [...turns].map((turn) => [...turn]);
+            setTurns([...clonedTurns, latestTurnCloned]);
+        }
     }
 
     return (
-        <gameContext.Provider value={{setLastSelectedCardIndex, tryPlayTurn, restartGame, rewindBoardToTurn, getCurrentTurnNumber}}>
+        <gameContext.Provider value={{playTurn, restartGame, rewindBoardToTurn, getCurrentTurnNumber}}>
             <div className={Style["game-pane"]}>
                 <TurnPane />
                 <BoardPane cards={turns[turns.length-1]} />

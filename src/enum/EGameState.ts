@@ -1,7 +1,7 @@
 enum EGameState {
     goingOn = 'going-on',
     draw = 'draw',
-    xVictory = 'xVictory',
-    oVictory = 'oVictory'
+    circleVictory = 'circleVictory',
+    crossVictory = 'crossVictory'
 }
 export default EGameState;

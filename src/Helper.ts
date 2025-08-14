@@ -1,4 +1,3 @@
-import ICard from "./interface/ICard";
 import EGameState from "./enum/EGameState";
 import ECardState from "./enum/ECardState";
 
@@ -7,7 +6,7 @@ import ECardState from "./enum/ECardState";
  * @param cards: all the cards on the board
  * @returns an enum indicating the state of this game
  */
-export function checkGameOver(cards: Array<ICard>): EGameState {
+export function checkGameState(cards: Array<ECardState>): EGameState {
     const winConditions = [
         [0,1,2], [3,4,5], [6,7,8],
         [0,3,6], [1,4,7], [2,5,8],
@@ -15,16 +14,16 @@ export function checkGameOver(cards: Array<ICard>): EGameState {
     ];
     for(let condition of winConditions) {
         const [a,b,c] = condition;
-        if(cards[a].state !== ECardState.undefined && cards[b].state !== ECardState.undefined && cards[c].state !== ECardState.undefined && cards[a].state === cards[b].state && cards[b].state === cards[c].state) {
-            if(cards[a].state === ECardState.circle) {
-                return EGameState.oVictory;
+        if(cards[a] !== ECardState.undefined && cards[b] !== ECardState.undefined && cards[c] !== ECardState.undefined && cards[a] === cards[b] && cards[b] === cards[c]) {
+            if(cards[a] === ECardState.circle) {
+                return EGameState.circleVictory;
             }
             else {
-                return EGameState.xVictory;
+                return EGameState.crossVictory;
             }
         }
     }
-    if(cards.findIndex((card) => card.state === ECardState.undefined) === -1) {
+    if(cards.findIndex((card) => card === ECardState.undefined) === -1) {
         return EGameState.draw;
     }
     return EGameState.goingOn;

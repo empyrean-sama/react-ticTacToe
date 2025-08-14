@@ -13,7 +13,7 @@ export default function HistoryPane() {
     const currentTurnNumber = gameContextAPI.getCurrentTurnNumber();
 
     for(let i=0; i<9; i++) {
-        turnButtons.push(<Button key={'rewind-key-'+i} onClick={() => gameContextAPI.rewindBoardToTurn(i+1)} disabled={currentTurnNumber <= (i + 1)} size="medium" variant="contained">Turn {i+1}</Button>)
+        turnButtons.push(<Button key={'rewind-key-'+i} onClick={() => gameContextAPI.rewindBoardToTurn(i)} disabled={currentTurnNumber <= (i)} size="medium" variant="contained">Turn {i}</Button>)
     }
 
     return (

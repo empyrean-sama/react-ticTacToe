@@ -10,6 +10,8 @@ import HistoryPane from "./Panes/HistoryPane";
 import IGameContext from "../interface/IGameContextAPI";
 import ECardState from "../enum/ECardState";
 import EGameState from "../enum/EGameState";
+import { FaRegCircle } from "react-icons/fa6";
+import { ImCross } from "react-icons/im";
 
 export const gameContext = createContext<IGameContext | undefined>(undefined);
 
@@ -59,8 +61,18 @@ export default function Game() {
         }
     }
 
+    function getIconInPlay(): React.ReactElement {
+        const turnNumber = getCurrentTurnNumber();
+        return (turnNumber % 2 === 0)? <ImCross size={64} /> : <FaRegCircle size={64} />
+    }
+
+    function getGameState(): EGameState {
+        const latestTurnCloned = [...(turns[turns.length-1])];
+        return checkGameState(latestTurnCloned);
+    }
+
     return (
-        <gameContext.Provider value={{playTurn, restartGame, rewindBoardToTurn, getCurrentTurnNumber}}>
+        <gameContext.Provider value={{playTurn, restartGame, rewindBoardToTurn, getCurrentTurnNumber, getIconInPlay, getGameState}}>
             <div className={Style["game-pane"]}>
                 <TurnPane />
                 <BoardPane cards={turns[turns.length-1]} />

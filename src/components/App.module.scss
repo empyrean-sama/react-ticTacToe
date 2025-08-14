@@ -3,3 +3,11 @@
     flex-direction: column;
     height: 100vh;
 }
+
+.flex-100-container {
+    flex: 1 1 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

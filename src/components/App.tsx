@@ -8,7 +8,9 @@ export default function App() {
     return (
         <div className={Style.app}>
             <NavBar />
-            <Game />
+            <div className={Style["flex-100-container"]}>
+                <Game />
+            </div>
         </div>
     );
 }

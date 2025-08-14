@@ -1,17 +1,15 @@
-import React, { cloneElement, createContext, useEffect, useState } from "react";
+import React, {createContext, useState} from "react";
+import Style from './Game.module.scss';
+
 import { checkGameState } from '../Helper';
 
-import _ from 'lodash';
-
-import ICard, { getDefaultCards } from "../interface/ICard";
 import TurnPane from "./Panes/TurnPane";
 import BoardPane from "./Panes/BoardPane";
 import HistoryPane from "./Panes/HistoryPane";
+
 import IGameContext from "../interface/IGameContextAPI";
 import ECardState from "../enum/ECardState";
 import EGameState from "../enum/EGameState";
-
-import Style from './Game.module.scss';
 
 export const gameContext = createContext<IGameContext | undefined>(undefined);
 

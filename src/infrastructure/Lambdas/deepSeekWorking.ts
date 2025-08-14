@@ -15,13 +15,23 @@ async function main(event: APIGatewayProxyEvent, context: Context): Promise<APIG
         });
         return {
             statusCode: 200,
-            body: JSON.stringify(completion.choices[0].message.content)
+            body: JSON.stringify(completion.choices[0].message.content),
+            headers: {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Methods': '*',
+            }
         }
     }
     catch {
         return {
             statusCode: 500,
-            body: JSON.stringify('error communicating with deepseek!')
+            body: JSON.stringify('error communicating with deepseek!'),
+            headers: {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Methods': '*',
+            }
         }
     }
 }
